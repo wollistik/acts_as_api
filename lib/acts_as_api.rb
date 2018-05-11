@@ -53,8 +53,9 @@ if defined?(Mongoid::Document)
   Mongoid::Document.send :include, ActsAsApi::Adapters::Mongoid
 end
 
-# Attach ourselves to the action controller of Rails
-if defined?(ActionController::Base)
-  ActionController::Base.send :include, ActsAsApi::Rendering
+# Attach ourselves to the controller classes (Base and API) of Rails
+if defined?(ActionController::Base) || defined?(ActionController::API)
+  ActionController::Base.send(:include, ActsAsApi::Rendering) if defined?(ActionController::Base)
+  ActionController::API.send(:include, ActsAsApi::Rendering) if defined?(ActionController::API)
   ActsAsApi::RailsRenderer.setup
 end
